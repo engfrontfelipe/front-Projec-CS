@@ -5,10 +5,10 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"  // Botão para submeter o formulário
+import { Button } from "@/components/ui/button" 
 
 function ManagementClient () {
-    // Estado para os campos do formulário
+
     const [nome, setNome] = useState("")
     const [seguimento, setSeguimento] = useState("")
     const [status, setStatus] = useState("")
@@ -18,7 +18,7 @@ function ManagementClient () {
     const [prompt, setPrompt] = useState("")
     const [objetivos, setObjetivos] = useState("")
 
-    // Função para enviar os dados para o back-end
+
     const handleSubmit = async (e: any) => {
         e.preventDefault()
 
@@ -66,7 +66,7 @@ function ManagementClient () {
                                 <Card className="">
                                     <form  className="grid grid-cols-2 p-5 gap-3 items-center" onSubmit={handleSubmit}>
                                         <div>
-                                            <Label className="mb-2" htmlFor="name">Nome:</Label>
+                                            <Label className="mb-2" htmlFor="name">Nome da empresa:</Label>
                                             <Input 
                                                 id="name" 
                                                 placeholder="Digite o nome" 

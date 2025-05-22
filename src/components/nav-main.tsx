@@ -17,7 +17,7 @@ export function NavMain() {
         <SidebarMenu>     
             <SidebarMenuItem>
               <SidebarMenuButton className="cursor-pointer">
-                  <Link to={"/"} className="flex gap-1">
+                  <Link to={"/initial"} className="flex gap-1">
                     <ChartLine size={18} />
                     <span>Tela de Clientes</span>
                   </Link>
