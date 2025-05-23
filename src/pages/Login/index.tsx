@@ -1,6 +1,5 @@
-
-import { LoginForm } from "@/components/login-form"
-import { Cpu } from "lucide-react"
+import { LoginForm } from "@/components/login-form";
+import { Cpu } from "lucide-react";
 
 export default function LoginPage() {
   return (
@@ -16,7 +15,10 @@ export default function LoginPage() {
 
       {/* Conteúdo principal */}
       <div className="relative z-10 flex w-full max-w-sm flex-col gap-6">
-        <a href="#" className="flex items-center gap-1 self-center font-medium text-white text-2xl">
+        <a
+          href="#"
+          className="flex items-center gap-1 self-center font-medium text-white text-2xl"
+        >
           <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Cpu size={20} />
           </div>
@@ -25,5 +27,5 @@ export default function LoginPage() {
         <LoginForm />
       </div>
     </div>
-  )
+  );
 }

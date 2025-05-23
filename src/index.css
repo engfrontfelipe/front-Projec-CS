@@ -7,7 +7,9 @@
   --radius: 1rem;
 
   /* Fundos e textos principais */
-  --background: oklch(0.92 0 240); /* fundo neutro claro com leve matiz azulado */
+  --background: oklch(
+    0.92 0 240
+  ); /* fundo neutro claro com leve matiz azulado */
   --foreground: oklch(0.2 0.01 200); /* azul bem escuro e discreto para texto */
 
   --card: oklch(0.95 0 240);

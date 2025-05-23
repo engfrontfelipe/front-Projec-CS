@@ -4,49 +4,138 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { FileCheck, TrendingUp, FileText, Info, Code, Scroll, MessageSquare } from "lucide-react"
+  FileCheck,
+  FileText,
+  Info,
+  Scroll,
+  MessageSquare,
+} from "lucide-react";
+
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export function Tab() {
-  return (
-    <Tabs defaultValue="account" className="w-[77vw] m-auto">
-      <TabsList className="grid w-full grid-cols-7">
-        <TabsTrigger value="account" className="cursor-pointer flex"> <FileCheck /> Contrato</TabsTrigger>
-        <TabsTrigger value="objetivo" className="cursor-pointer flex"><TrendingUp />Objetivo</TabsTrigger>
-        <TabsTrigger value="briefing" className="cursor-pointer flex"><FileText />Briefing</TabsTrigger>
-        <TabsTrigger value="info" className="cursor-pointer flex"><Info /> Info de Contato</TabsTrigger>
-        <TabsTrigger value="prompt" className="cursor-pointer flex"><Code />Prompt</TabsTrigger>
-        <TabsTrigger value="notas" className="cursor-pointer flex"><Scroll />Notas</TabsTrigger>
-        <TabsTrigger value="int" className="cursor-pointer flex"><MessageSquare />Interações</TabsTrigger>
 
+   const { id } = useParams();
+  const [cliente, setCliente] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    async function fetchClientData() {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:5000/clientes/${id}`);
+        if (!response.ok) {
+          throw new Error("Erro ao buscar os dados do cliente.");
+        }
+        const data = await response.json();
+        setCliente(data);
+      } catch (error) {
+        console.error("Erro ao buscar os dados do cliente:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (id) {
+      fetchClientData();
+    }
+  }, [id]);
+
+if (loading) {
+  return (
+    <div className="flex items-center justify-center h-[70vh]">
+      <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+    </div>
+  );
+}
+
+  if (!cliente) {
+    return <div>Cliente não encontrado!</div>;
+  }
+  return (
+    <Tabs defaultValue="account" className="w-full p-5 m-auto ">
+      <TabsList className="grid w-full grid-cols-5">
+        <TabsTrigger value="account" className="cursor-pointer flex">
+          {" "}
+          <FileCheck /> Contrato
+        </TabsTrigger>
+       
+        <TabsTrigger value="briefing" className="cursor-pointer flex">
+          <FileText />
+          Ordens de serviço
+        </TabsTrigger>
+        <TabsTrigger value="info" className="cursor-pointer flex">
+          <Info /> Info de Contato
+        </TabsTrigger>
+    
+        <TabsTrigger value="notas" className="cursor-pointer flex">
+          <Scroll />
+          Notas
+        </TabsTrigger>
+        <TabsTrigger value="int" className="cursor-pointer flex">
+          <MessageSquare />
+          Reuniões agendadas
+        </TabsTrigger>
       </TabsList>
 
       {/* Contrato */}
-      <TabsContent value="account">
-        <Card>
-          <CardHeader>
-            <CardTitle>Contrato</CardTitle>
-            <CardDescription>Informações contratuais do cliente</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 text-sm">
+    <TabsContent value="account">
+  <Card>
+    <CardHeader>
+      <CardTitle>Contrato</CardTitle>
+      <CardDescription>
+        Informações contratuais do cliente
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="space-y-4 text-sm">
+      {cliente.contrato ? (() => {
+        const contrato = JSON.parse(cliente.contrato);
+        return (
+          <>
+           
             <div>
-              <strong>Nome do Cliente:</strong> João Silva
+              <strong>Serviço Contratado:</strong> {contrato.servicoContratado}
             </div>
             <div>
-              <strong>Serviço Contratado:</strong> Gestão de Mídias Sociais
+              <strong>Descrição do Serviço:</strong> {contrato.descricaoServico}
             </div>
             <div>
-              <strong>Prazo:</strong> 12 meses
+              <strong>Prazo:</strong> {contrato.prazo}
             </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
+            <div>
+              <strong>Início:</strong> {contrato.inicio}
+            </div>
+            <div>
+              <strong>Término:</strong> {contrato.termino}
+            </div>
+            <div>
+              <strong>Valor Mensal:</strong> {contrato.valorMensal}
+            </div>
+            <div>
+              <strong>Condições de Pagamento:</strong> {contrato.condicoesPagamento}
+            </div>
+            <div>
+              <strong>Responsável pela Conta:</strong> {contrato.responsavelConta}
+            </div>
+            <div>
+              <strong>Cláusulas Adicionais:</strong> {contrato.clausulasAdicionais}
+            </div>
+            <div>
+              <strong>Assinatura Digital:</strong> {contrato.assinaturaDigital ? 'Sim' : 'Não'}
+            </div>
+          </>
+        );
+      })() : (
+        <p>Contrato não disponível</p>
+      )}
+    </CardContent>
+  </Card>
+</TabsContent>
+
 
       {/* Objetivo */}
       <TabsContent value="objetivo">
@@ -66,30 +155,39 @@ export function Tab() {
         </Card>
       </TabsContent>
 
-      {/* Briefing */}
       <TabsContent value="briefing">
         <Card>
           <CardHeader>
-            <CardTitle>Briefing</CardTitle>
-            <CardDescription>Informações iniciais do projeto</CardDescription>
+            <CardTitle>Ordens de serviço</CardTitle>
+            <CardDescription>Todas O.S vinculadas a esse cliente.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <div>
-              <strong>Concorrentes:</strong> Empresa X, Marca Y
-            </div>
-            <div>
-              <strong>Diferencial da Marca:</strong> Atendimento personalizado
-            </div>
+          <CardContent className="text-sm grid grid-cols-3 gap-3 ">
+            <Card className="bg-accent w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-accent w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-accent w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-accent w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
           </CardContent>
         </Card>
       </TabsContent>
 
-      {/* Informações de Contato */}
       <TabsContent value="info">
         <Card>
           <CardHeader>
             <CardTitle>Informações de Contato</CardTitle>
-            <CardDescription>Como entrar em contato com o cliente</CardDescription>
+            <CardDescription>
+              Como entrar em contato com o cliente
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
@@ -109,7 +207,9 @@ export function Tab() {
         <Card>
           <CardHeader>
             <CardTitle>Informações de Contato</CardTitle>
-            <CardDescription>Como entrar em contato com o cliente</CardDescription>
+            <CardDescription>
+              Como entrar em contato com o cliente
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
@@ -124,6 +224,35 @@ export function Tab() {
           </CardContent>
         </Card>
       </TabsContent>
+
+            <TabsContent value="notas">
+        <Card>
+          <CardHeader>
+            <CardTitle>Informações de Contato</CardTitle>
+            <CardDescription>
+              Como entrar em contato com o cliente
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid  gap-3 grid-cols-3 text-sm">
+                <Card className="bg-amber-50 w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-amber-50 w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-amber-50 w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+
+            <Card className="bg-amber-50 w-full">
+              <CardTitle>oi</CardTitle>
+            </Card>
+          </CardContent>
+        </Card>
+      </TabsContent>
     </Tabs>
-  )
+  );
 }
+

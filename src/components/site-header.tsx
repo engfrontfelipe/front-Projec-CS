@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import { ThemeSwitcher } from "./ui/theme-switcher"
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeSwitcher } from "./ui/theme-switcher";
 
 interface SiteHeaderProps {
-  title: string
+  title: string;
 }
 
 export function SiteHeader({ title }: SiteHeaderProps) {
@@ -24,5 +24,5 @@ export function SiteHeader({ title }: SiteHeaderProps) {
         </div>
       </div>
     </header>
-  )
+  );
 }

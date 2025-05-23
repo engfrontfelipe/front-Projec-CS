@@ -1,36 +1,37 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
-import { Card, CardContent, CardTitle } from "@/components/ui/card"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { ArrowRight, CircleCheckBig, User } from "lucide-react"
-import { Link } from "react-router-dom" // <-- Importar o Link
+import { useState, useEffect } from "react";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { ArrowRight, CircleCheckBig, User } from "lucide-react";
+import { Link } from "react-router-dom"; // <-- Importar o Link
 
 interface Cliente {
-  id: string
-  nome: string
-  status: string
-  segmento: string
+  id: string;
+  nome: string;
+  status: string;
+  seguimento: string;
 }
 
 function Dashboard() {
-  const [clientes, setClientes] = useState<Cliente[]>([])
+  const [clientes, setClientes] = useState<Cliente[]>([]);
 
   useEffect(() => {
     async function fetchClientes() {
       try {
-        const res = await fetch("http://localhost:5000/clientes") // URL da sua API
-        const data = await res.json()
-        setClientes(data) // Armazenar os dados dos clientes
+        const res = await fetch("http://localhost:5000/clientes"); 
+        const data = await res.json();
+        setClientes(data); 
       } catch (error) {
-        console.error("Erro ao buscar clientes:", error)
+        console.error("Erro ao buscar clientes:", error);
       }
     }
 
-    fetchClientes()
-  }, [])
+    fetchClientes();
+  }, []);
+  
 
   return (
     <SidebarProvider>
@@ -45,8 +46,7 @@ function Dashboard() {
                 <h1 className="font-bold text-[19px]">Clientes</h1>
               </div>
 
-
-              <div className="px-4 lg:px-6 flex gap-3">
+              <div className="px-4 lg:px-6 grid grid-cols-3 gap-3">
                 {clientes.length > 0 ? (
                   clientes.map((cliente) => (
                     <Card className="w-full p-5" key={cliente.id}>
@@ -65,7 +65,10 @@ function Dashboard() {
                       </CardTitle>
                       <CardContent>
                         <p className="text-sm text-gray-700 -ml-6 font-medium">
-                          Segmento: <span className="text-gray-400">{cliente.segmento}</span>
+                          Segmento:{' '}
+                          <span className="text-gray-400">
+                            {cliente.seguimento}
+                          </span>
                         </p>
                         <Link
                           to={`/clientes/${cliente.id}`}
@@ -86,7 +89,7 @@ function Dashboard() {
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;
