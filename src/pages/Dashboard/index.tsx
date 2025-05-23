@@ -43,7 +43,7 @@ function Dashboard() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <div className="px-4 flex items-center lg:px-6">
                 <User className="mr-3 ml-3 text-blue-500" />
-                <h1 className="font-bold text-[19px]">Clientes</h1>
+                <h1 className="font-bold text-[19px]">Customers</h1>
               </div>
 
               <div className="px-4 lg:px-6 grid grid-cols-3 gap-3">
@@ -53,19 +53,26 @@ function Dashboard() {
                       <CardTitle className="flex justify-between items-center">
                         <h3 className="text-[19px]">{cliente.nome}</h3>
                         <p
-                          className={`text-sm flex items-center ${
-                            cliente.status === "Ativo"
-                              ? "bg-blue-400 text-white"
-                              : "bg-gray-400 text-white"
-                          } pt-[3px] pl-2 pb-[3px] pr-2 rounded-2xl`}
-                        >
-                          <CircleCheckBig className="text-white w-4 mr-2" />
-                          {cliente.status}
-                        </p>
+  className={`text-sm flex items-center
+    ${
+      cliente.status === "Active"
+        ? "bg-green-500 text-white"
+        : cliente.status === "Inactive"
+        ? "bg-red-400 text-white"
+        : cliente.status === "Pending"
+        ? "bg-yellow-400 text-white"
+        : "bg-gray-200 text-black"
+    }
+    pt-[3px] pl-2 pb-[3px] pr-2 rounded-2xl`}
+>
+  <CircleCheckBig className="text-white w-4 mr-2" />
+  {cliente.status}
+</p>
+
                       </CardTitle>
                       <CardContent>
                         <p className="text-sm text-gray-700 -ml-6 font-medium">
-                          Segmento:{' '}
+                          Segment:{' '}
                           <span className="text-gray-400">
                             {cliente.seguimento}
                           </span>
@@ -74,7 +81,7 @@ function Dashboard() {
                           to={`/clientes/${cliente.id}`}
                           className="text-sm text-blue-500 -ml-6 mt-3 flex items-center"
                         >
-                          Ver Detalhes
+                          See details
                           <ArrowRight className="text-blue-500 w-4 pb-0.5 ml-2" />
                         </Link>
                       </CardContent>

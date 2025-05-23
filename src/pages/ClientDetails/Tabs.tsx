@@ -18,8 +18,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export function Tab() {
-
-   const { id } = useParams();
+  const { id } = useParams();
   const [cliente, setCliente] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -29,12 +28,12 @@ export function Tab() {
         setLoading(true);
         const response = await fetch(`http://localhost:5000/clientes/${id}`);
         if (!response.ok) {
-          throw new Error("Erro ao buscar os dados do cliente.");
+          throw new Error("Error fetching client data.");
         }
         const data = await response.json();
         setCliente(data);
       } catch (error) {
-        console.error("Erro ao buscar os dados do cliente:", error);
+        console.error("Error fetching client data:", error);
       } finally {
         setLoading(false);
       }
@@ -45,209 +44,178 @@ export function Tab() {
     }
   }, [id]);
 
-if (loading) {
-  return (
-    <div className="flex items-center justify-center h-[70vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   if (!cliente) {
-    return <div>Cliente não encontrado!</div>;
+    return <div>Client not found!</div>;
   }
+
   return (
-    <Tabs defaultValue="account" className="w-full p-5 m-auto ">
+    <Tabs defaultValue="account" className="w-full p-5 m-auto">
       <TabsList className="grid w-full grid-cols-5">
         <TabsTrigger value="account" className="cursor-pointer flex">
-          {" "}
-          <FileCheck /> Contrato
+          <FileCheck /> Contract
         </TabsTrigger>
-       
-        <TabsTrigger value="briefing" className="cursor-pointer flex">
+
+        <TabsTrigger value="OS" className="cursor-pointer flex">
           <FileText />
-          Ordens de serviço
+          Work Orders
         </TabsTrigger>
+
         <TabsTrigger value="info" className="cursor-pointer flex">
-          <Info /> Info de Contato
+          <Info /> Contact Info
         </TabsTrigger>
-    
+
         <TabsTrigger value="notas" className="cursor-pointer flex">
           <Scroll />
-          Notas
+          Notes
         </TabsTrigger>
+
         <TabsTrigger value="int" className="cursor-pointer flex">
           <MessageSquare />
-          Reuniões agendadas
+          Scheduled Meetings
         </TabsTrigger>
       </TabsList>
 
-      {/* Contrato */}
-    <TabsContent value="account">
-  <Card>
-    <CardHeader>
-      <CardTitle>Contrato</CardTitle>
-      <CardDescription>
-        Informações contratuais do cliente
-      </CardDescription>
-    </CardHeader>
-    <CardContent className="space-y-4 text-sm">
-      {cliente.contrato ? (() => {
-        const contrato = JSON.parse(cliente.contrato);
-        return (
-          <>
-           
-            <div>
-              <strong>Serviço Contratado:</strong> {contrato.servicoContratado}
-            </div>
-            <div>
-              <strong>Descrição do Serviço:</strong> {contrato.descricaoServico}
-            </div>
-            <div>
-              <strong>Prazo:</strong> {contrato.prazo}
-            </div>
-            <div>
-              <strong>Início:</strong> {contrato.inicio}
-            </div>
-            <div>
-              <strong>Término:</strong> {contrato.termino}
-            </div>
-            <div>
-              <strong>Valor Mensal:</strong> {contrato.valorMensal}
-            </div>
-            <div>
-              <strong>Condições de Pagamento:</strong> {contrato.condicoesPagamento}
-            </div>
-            <div>
-              <strong>Responsável pela Conta:</strong> {contrato.responsavelConta}
-            </div>
-            <div>
-              <strong>Cláusulas Adicionais:</strong> {contrato.clausulasAdicionais}
-            </div>
-            <div>
-              <strong>Assinatura Digital:</strong> {contrato.assinaturaDigital ? 'Sim' : 'Não'}
-            </div>
-          </>
-        );
-      })() : (
-        <p>Contrato não disponível</p>
-      )}
-    </CardContent>
-  </Card>
-</TabsContent>
+      {/* Contract Tab */}
+      <TabsContent value="account">
+        <Card>
+          <CardHeader>
+            <CardTitle>Contract</CardTitle>
+            <CardDescription>Client contract information</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm">
+            {cliente.contrato ? (() => {
+              const contrato = JSON.parse(cliente.contrato);
+              return (
+                <>
+                  <div>
+                    <strong>Service:</strong> {contrato.servicoContratado}
+                  </div>
+                  <div>
+                    <strong>Description:</strong> {contrato.descricaoServico}
+                  </div>
+                  <div>
+                    <strong>Term:</strong> {contrato.prazo}
+                  </div>
+                  <div>
+                    <strong>Start Date:</strong> {contrato.inicio}
+                  </div>
+                  <div>
+                    <strong>End Date:</strong> {contrato.termino}
+                  </div>
+                  <div>
+                    <strong>Monthly Fee:</strong> {contrato.valorMensal}
+                  </div>
+                  <div>
+                    <strong>Payment Terms:</strong> {contrato.condicoesPagamento}
+                  </div>
+                  <div>
+                    <strong>Account Manager:</strong> {contrato.responsavelConta}
+                  </div>
+                  <div>
+                    <strong>Additional Clauses:</strong> {contrato.clausulasAdicionais}
+                  </div>
+                  <div>
+                    <strong>Digital Signature:</strong> {contrato.assinaturaDigital ? "Yes" : "No"}
+                  </div>
+                </>
+              );
+            })() : (
+              <p>Contract not available</p>
+            )}
+          </CardContent>
+        </Card>
+      </TabsContent>
 
-
-      {/* Objetivo */}
+      {/* Objectives (Hardcoded Example) */}
       <TabsContent value="objetivo">
         <Card>
           <CardHeader>
-            <CardTitle>Objetivo</CardTitle>
-            <CardDescription>O que o cliente deseja alcançar</CardDescription>
+            <CardTitle>Objective</CardTitle>
+            <CardDescription>What the client wants to achieve</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
-              <strong>Meta Principal:</strong> Aumentar o engajamento em 30%
+              <strong>Main Goal:</strong> Increase engagement by 30%
             </div>
             <div>
-              <strong>Público-alvo:</strong> Jovens de 18 a 25 anos
+              <strong>Target Audience:</strong> Young people aged 18–25
             </div>
           </CardContent>
         </Card>
       </TabsContent>
 
-      <TabsContent value="briefing">
+      {/* Work Orders */}
+      <TabsContent value="OS">
         <Card>
           <CardHeader>
-            <CardTitle>Ordens de serviço</CardTitle>
-            <CardDescription>Todas O.S vinculadas a esse cliente.</CardDescription>
+            <CardTitle>Work Orders</CardTitle>
+            <CardDescription>All service orders linked to this client</CardDescription>
           </CardHeader>
-          <CardContent className="text-sm grid grid-cols-3 gap-3 ">
+          <CardContent className="text-sm grid grid-cols-3 gap-3">
             <Card className="bg-accent w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
-
             <Card className="bg-accent w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
-
             <Card className="bg-accent w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
-
             <Card className="bg-accent w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
           </CardContent>
         </Card>
       </TabsContent>
 
+      {/* Contact Info */}
       <TabsContent value="info">
         <Card>
           <CardHeader>
-            <CardTitle>Informações de Contato</CardTitle>
-            <CardDescription>
-              Como entrar em contato com o cliente
-            </CardDescription>
+            <CardTitle>Contact Information</CardTitle>
+            <CardDescription>How to contact the client</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div>
-              <strong>Email:</strong> joao.silva@email.com
+              <strong>Email:</strong> {cliente.email}
             </div>
             <div>
-              <strong>Telefone:</strong> (11) 91234-5678
+              <strong>Phone:</strong> {cliente.contato}
             </div>
             <div>
-              <strong>Empresa:</strong> Agência Silva & Co.
+              <strong>Company:</strong> {cliente.nome}
             </div>
           </CardContent>
         </Card>
       </TabsContent>
 
-      <TabsContent value="prompt">
+      {/* Notes */}
+      <TabsContent value="notas">
         <Card>
           <CardHeader>
-            <CardTitle>Informações de Contato</CardTitle>
-            <CardDescription>
-              Como entrar em contato com o cliente
-            </CardDescription>
+            <CardTitle>Notes</CardTitle>
+            <CardDescription>Important annotations about the client</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm">
-            <div>
-              <strong>Email:</strong> joao.silva@email.com
-            </div>
-            <div>
-              <strong>Telefone:</strong> (11) 91234-5678
-            </div>
-            <div>
-              <strong>Empresa:</strong> Agência Silva & Co.
-            </div>
-          </CardContent>
-        </Card>
-      </TabsContent>
-
-            <TabsContent value="notas">
-        <Card>
-          <CardHeader>
-            <CardTitle>Informações de Contato</CardTitle>
-            <CardDescription>
-              Como entrar em contato com o cliente
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid  gap-3 grid-cols-3 text-sm">
-                <Card className="bg-amber-50 w-full">
-              <CardTitle>oi</CardTitle>
-            </Card>
-
+          <CardContent className="grid gap-3 grid-cols-3 text-sm">
             <Card className="bg-amber-50 w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
-
             <Card className="bg-amber-50 w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
             </Card>
-
             <Card className="bg-amber-50 w-full">
-              <CardTitle>oi</CardTitle>
+              <CardTitle>Hello</CardTitle>
+            </Card>
+            <Card className="bg-amber-50 w-full">
+              <CardTitle>Hello</CardTitle>
             </Card>
           </CardContent>
         </Card>
@@ -255,4 +223,3 @@ if (loading) {
     </Tabs>
   );
 }
-

@@ -33,7 +33,7 @@ import { Input } from "@/components/ui/input";
 
 function Dashboard() {
   const { id } = useParams();
-  const [cliente, setCliente] = useState<any>(null);
+  const [client, setClient] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -42,12 +42,12 @@ function Dashboard() {
         setLoading(true);
         const response = await fetch(`http://localhost:5000/clientes/${id}`);
         if (!response.ok) {
-          throw new Error("Erro ao buscar os dados do cliente.");
+          throw new Error("Error fetching client data.");
         }
         const data = await response.json();
-        setCliente(data);
+        setClient(data);
       } catch (error) {
-        console.error("Erro ao buscar os dados do cliente:", error);
+        console.error("Error fetching client data:", error);
       } finally {
         setLoading(false);
       }
@@ -58,16 +58,16 @@ function Dashboard() {
     }
   }, [id]);
 
-if (loading) {
-  return (
-    <div className="flex items-center justify-center h-[70vh]">
-      <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[70vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
-  if (!cliente) {
-    return <div>Cliente não encontrado!</div>;
+  if (!client) {
+    return <div>Client not found!</div>;
   }
 
   return (
@@ -82,67 +82,56 @@ if (loading) {
                 <Link to={"/initial"}>
                   <ArrowLeft className="mr-3 ml-3 w-5 mt-1 h-5 cursor-pointer text-blue-500" />
                 </Link>
-                <h1 className="font-bold text-[19px]">{cliente.nome}</h1>
+                <h1 className="font-bold text-[19px]">{client.nome}</h1>
               </div>
               <div className="flex ml-6 gap-x-3 -mb-8">
-                <Button
-                  className="rounded cursor-pointer flex"
-                  variant={"default"}
-                >
+                <Button className="rounded cursor-pointer flex" variant={"default"}>
                   <Send />
-                  Nova Interação
+                  New Interaction
                 </Button>
-                <Button
-                  className="rounded cursor-pointer flex"
-                  variant={"outline"}
-                >
+                <Button className="rounded cursor-pointer flex" variant={"outline"}>
                   <SquarePen />
-                  Editar Cliente
+                  Edit Client
                 </Button>
               </div>
             </div>
+
             <div className="grid grid-cols-3 gap-4 py-4 md:gap-6 md:py-6 px-6">
               <Card className="p-4">
                 <CardTitle className="text-[20px] flex items-center gap-2 ">
-                  <Info /> Informações de Contato
+                  <Info /> Contact Information
                 </CardTitle>
                 <CardContent>
                   <p className="text-gray-500 text-sm">
-                    {cliente.contato ||
-                      "Nenhuma informação de contato disponível"}
+                    {client.contato || "No contact information available"}
                   </p>
                   <p className="text-gray-500 text-sm">
-                    {cliente.email ||
-                      "Nenhuma informação de contato disponível"}
+                    {client.email || "No contact information available"}
                   </p>
                 </CardContent>
                 <CardFooter>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        className="w-full rounded cursor-pointer"
-                        variant={"outline"}
-                      >
-                        Atualizar Contato
+                      <Button className="w-full rounded cursor-pointer" variant={"outline"}>
+                        Update Contact
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Atualizar Contato</DialogTitle>
+                        <DialogTitle>Update Contact</DialogTitle>
                         <DialogDescription>
                           <Label className="mt-5">
-                            Telefone:
+                            Phone:
                             <Input />
                           </Label>
-
-                             <Label className="mt-5">
+                          <Label className="mt-5">
                             Email:
                             <Input />
                           </Label>
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <Button className="rounded cursor-pointer" type="submit">Salvar</Button>
+                        <Button className="rounded cursor-pointer" type="submit">Save</Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
@@ -151,44 +140,37 @@ if (loading) {
 
               <Card className="p-4">
                 <CardTitle className="text-[20px] flex items-center gap-2 ">
-                  <TrendingUp />
-                  Objetivos
+                  <TrendingUp /> Goals
                 </CardTitle>
                 <CardContent>
                   <p className="text-gray-500 -ml-5 text-sm">
-                    {cliente.objetivos ||
-                      "Nenhum Objetivo encontrado no momento."}
+                    {client.objetivos || "No goals found at the moment."}
                   </p>
                 </CardContent>
                 <CardFooter>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        className="w-full rounded cursor-pointer"
-                        variant={"outline"}
-                      >
-                        Redefinir objetivos
+                      <Button className="w-full rounded cursor-pointer" variant={"outline"}>
+                        Redefine Goals
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Redefinir Objetivos</DialogTitle>
+                        <DialogTitle>Redefine Goals</DialogTitle>
                         <DialogDescription>
                           <Label className="mt-5">
-                            Objetivo:
+                            Goal:
                             <Input />
                           </Label>
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <Button className="rounded cursor-pointer" type="submit">Salvar</Button>
+                        <Button className="rounded cursor-pointer" type="submit">Save</Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
                 </CardFooter>
               </Card>
-
-              
 
               <Card className="p-4">
                 <CardTitle className="text-[20px] flex items-center gap-2 ">
@@ -196,32 +178,29 @@ if (loading) {
                 </CardTitle>
                 <CardContent>
                   <p className="text-gray-500 -ml-5 text-sm">
-                    {cliente.prompt || "Prompt utilizado na IA."}
+                    {client.prompt || "Prompt used in the AI."}
                   </p>
                 </CardContent>
                 <CardFooter>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        className="w-full rounded cursor-pointer"
-                        variant={"outline"}
-                      >
-                        Atualizar Prompt
+                      <Button className="w-full rounded cursor-pointer" variant={"outline"}>
+                        Update Prompt
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Atualizar Prompt</DialogTitle>
+                        <DialogTitle>Update Prompt</DialogTitle>
                         <DialogDescription>
-                          Atualize o prompt de IA usado com este cliente.
-                           <Label className="mt-5">
+                          Update the AI prompt used with this client.
+                          <Label className="mt-5">
                             Prompt:
                             <Input />
                           </Label>
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <Button className="rounded cursor-pointer" type="submit">Salvar</Button>
+                        <Button className="rounded cursor-pointer" type="submit">Save</Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
@@ -230,62 +209,51 @@ if (loading) {
 
               <Card className="p-4">
                 <CardTitle className="text-[20px] flex items-center gap-2 ">
-                  <Scroll /> Notas
+                  <Scroll /> Notes
                 </CardTitle>
-                <CardContent>
-                  <p className="text-gray-500 -ml-5 text-sm">
-                    {cliente.objetivos || "Prompt utilizado na IA."}
-                  </p>
-                </CardContent>
+           
                 <CardFooter>
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button
-                        className="w-full rounded cursor-pointer"
-                        variant={"outline"}
-                      >
-                        Inserir notas
+                      <Button className="w-full rounded cursor-pointer" variant={"outline"}>
+                        Add Notes
                       </Button>
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Notas</DialogTitle>
+                        <DialogTitle>Notes</DialogTitle>
                         <DialogDescription>
-                          Adicione ou edite as anotações deste cliente.
-
-                           <Label className="mt-5">
-                            Título:
+                          Add or edit notes for this client.
+                          <Label className="mt-5">
+                            Title:
                             <Input />
                           </Label>
-
-                           <Label className="mt-5">
-                            Escopo:
+                          <Label className="mt-5">
+                            Scope:
                             <Input />
                           </Label>
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
-                        <Button className="rounded cursor-pointer" type="submit">Salvar</Button>
+                        <Button className="rounded cursor-pointer" type="submit">Save</Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
                 </CardFooter>
               </Card>
             </div>
-            <Tab />
-            <div className="p-5 pt-0">
-                <h3 className="flex justify-center text-2xl  font-medium mt-5 mb-1">
-              <Sparkles className="itens-center mt-1 text-blue-600 mr-2" />{" "}
-              Assistente AI
-            </h3>
-            <Card className=" w-full p-4 mb-5">
-              <h4 className="-mb-2 font-medium">Digite sua mensagem:</h4>
-              <Textarea
-                placeholder="Digite sua mensagem."
-                className="resize-none"
-              />
-            </Card>
 
+            <Tab />
+
+            <div className="p-5 pt-0">
+              <h3 className="flex justify-center text-2xl font-medium mt-5 mb-1">
+                <Sparkles className="itens-center mt-1 text-blue-600 mr-2" />
+                AI Assistant
+              </h3>
+              <Card className="w-full p-4 mb-5">
+                <h4 className="-mb-2 font-medium">Type your message:</h4>
+                <Textarea placeholder="Type your message." className="resize-none" />
+              </Card>
             </div>
           </div>
         </div>

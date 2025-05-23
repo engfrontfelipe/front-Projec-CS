@@ -18,21 +18,21 @@ export function NavMain() {
             <SidebarMenuButton className="cursor-pointer">
               <Link to={"/initial"} className="flex gap-1">
                 <ChartLine size={18} />
-                <span>Tela de Clientes</span>
+                <span>Customers screen</span>
               </Link>
             </SidebarMenuButton>
 
             <SidebarMenuButton className="cursor-pointer">
               <Link to={"/management-trainning"} className="flex gap-1">
                 <BicepsFlexed size={18} />
-                <span>Base de Conhecimento</span>
+                <span>Knowledge Base</span>
               </Link>
             </SidebarMenuButton>
 
             <SidebarMenuButton className="cursor-pointer">
               <Link to={"/management-client"} className="flex gap-1">
                 <UserRoundPen size={18} />
-                <span>Gestão de Clientes</span>
+                <span>Customer management</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
