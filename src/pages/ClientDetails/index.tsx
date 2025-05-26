@@ -31,16 +31,22 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
+
 function Dashboard() {
   const { id } = useParams();
   const [client, setClient] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function fetchClientData() {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/clientes/${id}`);
+        const response = await fetch(`http://localhost:5000/api/clientes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Error fetching client data.");
         }

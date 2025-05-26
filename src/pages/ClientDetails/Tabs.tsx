@@ -21,12 +21,18 @@ export function Tab() {
   const { id } = useParams();
   const [cliente, setCliente] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+    const token = localStorage.getItem("token");
 
   useEffect(() => {
     async function fetchClientData() {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/clientes/${id}`);
+        const response = await fetch(`http://localhost:5000/api/clientes/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
         if (!response.ok) {
           throw new Error("Error fetching client data.");
         }
@@ -44,6 +50,7 @@ export function Tab() {
     }
   }, [id]);
 
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[70vh]">
@@ -56,6 +63,8 @@ export function Tab() {
     return <div>Client not found!</div>;
   }
 
+  console.log("Client data:", cliente);
+  
   return (
     <Tabs defaultValue="account" className="w-full p-5 m-auto">
       <TabsList className="grid w-full grid-cols-5">

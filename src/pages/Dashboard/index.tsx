@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ArrowRight, CircleCheckBig, User } from "lucide-react";
-import { Link } from "react-router-dom"; // <-- Importar o Link
+import { Link } from "react-router-dom";
 
 interface Cliente {
   id: string;
@@ -17,21 +17,38 @@ interface Cliente {
 
 function Dashboard() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     async function fetchClientes() {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setError("Usuário não autenticado");
+        return;
+      }
+
       try {
-        const res = await fetch("http://localhost:5000/clientes"); 
+        const res = await fetch("http://localhost:5000/api/clientes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Erro ao buscar clientes");
+        }
+
         const data = await res.json();
-        setClientes(data); 
+        setClientes(data);
       } catch (error) {
         console.error("Erro ao buscar clientes:", error);
+        setError("Erro ao buscar clientes");
       }
     }
 
     fetchClientes();
   }, []);
-  
 
   return (
     <SidebarProvider>
@@ -46,51 +63,54 @@ function Dashboard() {
                 <h1 className="font-bold text-[19px]">Customers</h1>
               </div>
 
-              <div className="px-4 lg:px-6 grid grid-cols-3 gap-3">
-                {clientes.length > 0 ? (
-                  clientes.map((cliente) => (
-                    <Card className="w-full p-5" key={cliente.id}>
-                      <CardTitle className="flex justify-between items-center">
-                        <h3 className="text-[19px]">{cliente.nome}</h3>
-                        <p
-  className={`text-sm flex items-center
-    ${
-      cliente.status === "Active"
-        ? "bg-green-500 text-white"
-        : cliente.status === "Inactive"
-        ? "bg-red-400 text-white"
-        : cliente.status === "Pending"
-        ? "bg-yellow-400 text-white"
-        : "bg-gray-200 text-black"
-    }
-    pt-[3px] pl-2 pb-[3px] pr-2 rounded-2xl`}
->
-  <CircleCheckBig className="text-white w-4 mr-2" />
-  {cliente.status}
-</p>
-
-                      </CardTitle>
-                      <CardContent>
-                        <p className="text-sm text-gray-700 -ml-6 font-medium">
-                          Segment:{' '}
-                          <span className="text-gray-400">
-                            {cliente.seguimento}
-                          </span>
-                        </p>
-                        <Link
-                          to={`/clientes/${cliente.id}`}
-                          className="text-sm text-blue-500 -ml-6 mt-3 flex items-center"
-                        >
-                          See details
-                          <ArrowRight className="text-blue-500 w-4 pb-0.5 ml-2" />
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  ))
-                ) : (
-                  <p className="text-sm ">Nenhum cliente encontrado.</p>
-                )}
-              </div>
+              {error ? (
+                <p className="px-10  text-red-500">{error}</p>
+              ) : (
+                <div className="px-4 lg:px-6 grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {clientes.length > 0 ? (
+                    clientes.map((cliente) => (
+                      <Card className="w-full p-5" key={cliente.id}>
+                        <CardTitle className="flex justify-between items-center">
+                          <h3 className="text-[19px]">{cliente.nome}</h3>
+                          <p
+                            className={`text-sm flex items-center
+                              ${
+                                cliente.status === "Active"
+                                  ? "bg-green-500 text-white"
+                                  : cliente.status === "Inactive"
+                                  ? "bg-red-400 text-white"
+                                  : cliente.status === "Pending"
+                                  ? "bg-yellow-400 text-white"
+                                  : "bg-gray-200 text-black"
+                              }
+                              pt-[3px] pl-2 pb-[3px] pr-2 rounded-2xl`}
+                          >
+                            <CircleCheckBig className="text-white w-4 mr-2" />
+                            {cliente.status}
+                          </p>
+                        </CardTitle>
+                        <CardContent>
+                          <p className="text-sm text-gray-700 -ml-6 font-medium">
+                            Segment:{" "}
+                            <span className="text-gray-400">
+                              {cliente.seguimento}
+                            </span>
+                          </p>
+                          <Link
+                            to={`/clientes/${cliente.id}`}
+                            className="text-sm text-blue-500 -ml-6 mt-3 flex items-center"
+                          >
+                            See details
+                            <ArrowRight className="text-blue-500 w-4 pb-0.5 ml-2" />
+                          </Link>
+                        </CardContent>
+                      </Card>
+                    ))
+                  ) : (
+                    <p className="text-sm">Nenhum cliente encontrado.</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>

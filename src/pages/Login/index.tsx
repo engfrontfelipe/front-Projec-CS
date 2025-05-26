@@ -4,7 +4,6 @@ import { Cpu } from "lucide-react";
 export default function LoginPage() {
   return (
     <div className="relative flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10 overflow-hidden">
-      {/* Imagem de fundo com blur */}
       <div
         className="absolute inset-0 bg-cover bg-center blur-sm"
         style={{
@@ -13,7 +12,7 @@ export default function LoginPage() {
         }}
       />
 
-      {/* Conteúdo principal */}
+  
       <div className="relative z-10 flex w-full max-w-sm flex-col gap-6">
         <a
           href="#"
